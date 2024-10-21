@@ -18,18 +18,17 @@ document.getElementById('signup-button').addEventListener('click', async () => {
   const username = document.getElementById('signup-username').value;
   const password = document.getElementById('signup-password').value;
   const email = document.getElementById('signup-email').value;
+  let signUpData = { username, password };
+  if(email && email.length) {
+    signUpData.options = {
+      userAttributes: {
+        email,
+      },
+    }
+  }
 
   try {
-    const { isSignUpComplete, userId, nextStep } = await signUp({
-      username,
-      password,
-      // options: {
-      //   userAttributes: {
-      //     email,
-      //   },
-      // }
-    });
-
+    const { isSignUpComplete, userId, nextStep } = await signUp(signUpData);
     console.log('User signed up:', userId);
     alert('Sign up successful.');
   } catch (error) {

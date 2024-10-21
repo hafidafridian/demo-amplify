@@ -65,5 +65,23 @@
       "providerPlugin": "awscloudformation",
       "service": "Lambda"
     }
+  },
+  "parameters": {
+    "AMPLIFY_function_demoamplifyf048c130PreSignup_deploymentBucketName": {
+      "usedBy": [
+        {
+          "category": "function",
+          "resourceName": "demoamplifyf048c130PreSignup"
+        }
+      ]
+    },
+    "AMPLIFY_function_demoamplifyf048c130PreSignup_s3Key": {
+      "usedBy": [
+        {
+          "category": "function",
+          "resourceName": "demoamplifyf048c130PreSignup"
+        }
+      ]
+    }
   }
 }

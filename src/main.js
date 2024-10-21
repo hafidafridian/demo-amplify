@@ -65,7 +65,6 @@ document.getElementById('signout-button').addEventListener('click', async () => 
 // TODO CRUD OPERATIONS
 
 // Fetch Todos
-// fetchTodos();
 async function fetchTodos() {
   try {
   	const result = await AppSyncClient.graphql({
@@ -104,6 +103,15 @@ document.getElementById('create-todo-button').addEventListener('click', async ()
     fetchTodos(); // Refresh the ToDo list
   } catch (error) {
     console.error('Error creating todo:', error);
+  }
+});
+
+// Create a ToDo
+document.getElementById('refresh-todo-button').addEventListener('click', async () => {
+  try {
+    fetchTodos(); // Refresh the ToDo list
+  } catch (error) {
+    console.error('Error refresh todo:', error);
   }
 });
 

@@ -28,7 +28,17 @@
   "auth": {
     "demoamplifyf048c130": {
       "customAuth": false,
-      "dependsOn": [],
+      "dependsOn": [
+        {
+          "attributes": [
+            "Arn",
+            "Name"
+          ],
+          "category": "function",
+          "resourceName": "demoamplifyf048c130PreSignup",
+          "triggerProvider": "Cognito"
+        }
+      ],
       "frontendAuthConfig": {
         "mfaConfiguration": "OFF",
         "mfaTypes": [
@@ -50,7 +60,7 @@
     }
   },
   "function": {
-    "triggerAutoConfirmAndVerifyUser": {
+    "demoamplifyf048c130PreSignup": {
       "build": true,
       "providerPlugin": "awscloudformation",
       "service": "Lambda"

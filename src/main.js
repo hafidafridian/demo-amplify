@@ -23,15 +23,15 @@ document.getElementById('signup-button').addEventListener('click', async () => {
     const { isSignUpComplete, userId, nextStep } = await signUp({
       username,
       password,
-      options: {
-        userAttributes: {
-          email,
-        },
-      }
+      // options: {
+      //   userAttributes: {
+      //     email,
+      //   },
+      // }
     });
 
     console.log('User signed up:', userId);
-    alert('Sign up successful. Please verify your email before signing in.');
+    alert('Sign up successful.');
   } catch (error) {
     console.error('Error signing up:', error);
     alert(error.message);

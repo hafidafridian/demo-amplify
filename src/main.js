@@ -1,19 +1,28 @@
 import { Amplify } from 'aws-amplify';
 import { generateClient } from 'aws-amplify/api';
-import { fetchAuthSession, signUp, signIn, signOut, getCurrentUser } from 'aws-amplify/auth';
+import { signUp, signIn, signOut, getCurrentUser } from 'aws-amplify/auth';
 import { uploadData, getUrl } from 'aws-amplify/storage';
 import awsconfig from './aws-exports';
 import { createTodo, deleteTodo, updateTodo } from './graphql/mutations'; // Assuming you have queries in graphql.js
 import { listTodos } from './graphql/queries'; // Assuming you have queries in graphql.js
-
-const authToken = (await fetchAuthSession()).tokens?.idToken?.toString();
 
 Amplify.configure(awsconfig);
 
 // Initialize the client for API calls
 const AppSyncClient = generateClient();
 
-// AUTHENTICATION LOGIC (same as before)
+// AUTHENTICATION LOGIC
+async function currentAuthenticatedUser() {
+  try {
+    return await getCurrentUser();
+    // console.log(`The username: ${username}`);
+    // console.log(`The userId: ${userId}`);
+    // console.log(`The signInDetails: ${signInDetails}`);
+  } catch (err) {
+    return;
+  }
+}
+
 document.getElementById('signup-button').addEventListener('click', async () => {
   const username = document.getElementById('signup-username').value;
   const password = document.getElementById('signup-password').value;
@@ -57,6 +66,7 @@ document.getElementById('signout-button').addEventListener('click', async () => 
     console.log('User signed out');
     alert('Signed out successfully!');
     document.getElementById('todos-list').innerHTML = ''; // Clear ToDos after sign out
+    fetchTodos();
   } catch (error) {
     console.error('Error signing out:', error);
   }
@@ -65,14 +75,28 @@ document.getElementById('signout-button').addEventListener('click', async () => 
 // TODO CRUD OPERATIONS
 
 // Fetch Todos
+fetchTodos();
 async function fetchTodos() {
   try {
-  	const result = await AppSyncClient.graphql({
-      query: listTodos,
-    });
-    const todos = result.data.listTodos.items;
-    console.log('Fetched ToDos:', todos);
-    renderTodos(todos);
+    const loggedUser = await currentAuthenticatedUser();
+    if(loggedUser && loggedUser.username) {
+      document.getElementById("guess-section").classList.add("hidden");
+      document.getElementById("todo-section").classList.remove("hidden");
+      document.getElementById("logged-section").classList.remove("hidden");
+      document.getElementById("logged-username").innerText = loggedUser.username;
+
+      const result = await AppSyncClient.graphql({
+        query: listTodos,
+      });
+      const todos = result.data.listTodos.items;
+      console.log('Fetched ToDos:', todos);
+      renderTodos(todos);
+    } else {
+      document.getElementById("guess-section").classList.remove("hidden");
+      document.getElementById("todo-section").classList.add("hidden");
+      document.getElementById("logged-section").classList.add("hidden");
+      document.getElementById("logged-username").innerText = '';
+    }
   } catch (error) {
     console.error('Error fetching todos:', error);
   }

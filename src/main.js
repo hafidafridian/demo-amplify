@@ -27,14 +27,29 @@ document.getElementById('signup-button').addEventListener('click', async () => {
   const username = document.getElementById('signup-username').value;
   const password = document.getElementById('signup-password').value;
   const email = document.getElementById('signup-email').value;
-  let signUpData = { username, password };
+  const alamat1 = document.getElementById('signup-alamat1').value;
+  const alamat2 = document.getElementById('signup-alamat2').value;
+  let userAttributes = {};
+
   if(email && email.length) {
-    signUpData.options = {
-      userAttributes: {
-        email,
-      },
-    }
+    userAttributes.email = email;
   }
+
+  if(alamat1 && alamat1.length) {
+    userAttributes['custom:alamat1'] = alamat1;
+  }
+
+  if(alamat2 && alamat2.length) {
+    userAttributes['custom:alamat2'] = alamat2;
+  }
+
+  const signUpData = { 
+    username,
+    password,
+    options: {
+      userAttributes
+    }
+  };
 
   try {
     const { isSignUpComplete, userId, nextStep } = await signUp(signUpData);

@@ -79,6 +79,7 @@ fetchTodos();
 async function fetchTodos() {
   try {
     const loggedUser = await currentAuthenticatedUser();
+    console.log('loggedUser: ', loggedUser);
     if(loggedUser && loggedUser.username) {
       document.getElementById("guess-section").classList.add("hidden");
       document.getElementById("todo-section").classList.remove("hidden");
@@ -159,13 +160,14 @@ async function updateExistingTodo(todoId, name, description) {
 async function deleteExistingTodo() {
   try {
   	const todoId = this.getAttribute("todoid");
+    console.log('Id to delete:', todoId);
   	await AppSyncClient.graphql({
       query: deleteTodo,
       variables: {
       	input: { id: todoId }
       },
     });
-    console.log('Deleted ToDo:', todoId);
+    
     fetchTodos(); // Refresh the ToDo list
   } catch (error) {
     console.error('Error deleting todo:', error);
